@@ -91,7 +91,7 @@
     "primary": {
       "type": "button",
       "label": "Get Started",
-      "href": "https://vatextract.com/sign-up"
+      "href": "https://vatextract.com/"
     }
   },
   "footer": {}
