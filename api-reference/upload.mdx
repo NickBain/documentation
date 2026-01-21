@@ -1,0 +1,87 @@
+---
+title: "Upload Invoice"
+description: "POST /api/upload"
+---
+
+Upload a PDF or image file for invoice extraction.
+
+## Endpoint
+
+```
+POST /api/upload
+```
+
+## Request
+
+**Content-Type**: `multipart/form-data`
+
+### Body Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `file` | File | Yes | PDF or image file (max 10MB) |
+| `clientId` | string | No | Assign to a specific client |
+
+### Example
+
+```bash
+curl -X POST https://vatextract.com/api/upload \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -F "file=@invoice.pdf" \
+  -F "clientId=client_abc123"
+```
+
+## Response
+
+```json
+{
+  "id": "inv_abc123xyz",
+  "status": "processing",
+  "fileName": "invoice.pdf",
+  "createdAt": "2024-01-15T10:30:00Z"
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique invoice ID |
+| `status` | string | `processing`, `completed`, or `failed` |
+| `fileName` | string | Original filename |
+| `createdAt` | string | ISO 8601 timestamp |
+
+## Processing Status
+
+After upload, the invoice is processed asynchronously. Check status by fetching the invoice:
+
+```bash
+GET /api/invoices/inv_abc123xyz
+```
+
+| Status | Description |
+|--------|-------------|
+| `processing` | OCR extraction in progress |
+| `completed` | Extraction finished, data available |
+| `failed` | Extraction failed (see `textractFailureReason`) |
+
+<Info>
+  Processing typically takes 5-15 seconds. VAT validation happens asynchronously after extraction completes.
+</Info>
+
+## Supported Formats
+
+| Format | Max Size | Notes |
+|--------|----------|-------|
+| PDF | 10MB | Native and scanned |
+| JPEG | 10MB | High resolution recommended |
+| PNG | 10MB | High resolution recommended |
+
+## Error Responses
+
+| Status | Error | Description |
+|--------|-------|-------------|
+| 400 | `No file provided` | Missing file in request |
+| 400 | `Invalid file type` | Unsupported format |
+| 413 | `File too large` | Exceeds 10MB limit |
+| 401 | `Unauthorized` | Invalid/missing auth token |

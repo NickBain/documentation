@@ -1,0 +1,130 @@
+---
+title: "Setup Guide"
+description: "Configure VATextractfor self-hosted or development environments"
+---
+
+This guide covers setting up VATextractfor local development or self-hosted deployments.
+
+## Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- OCR provider credentials (Google Document AI or AWS Textract)
+
+## Environment Variables
+
+Create a `.env` file based on `.env.example`:
+
+```bash
+# Authentication (Clerk)
+CLERK_PUBLISHABLE_KEY=pk_...
+CLERK_SECRET_KEY=sk_...
+CLERK_WEBHOOK_SECRET=whsec_...
+
+# Database
+DATABASE_URL=postgresql://user:password@host:5432/invoiceparse
+
+# AWS (for Textract or S3 storage)
+AWS_ACCESS_KEY_ID=AKIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=your-bucket
+
+# App URL
+NEXT_PUBLIC_APP_URL=http://localhost:5000
+```
+
+## OCR Provider Configuration
+
+Set the `OCR_PROVIDER` environment variable:
+
+| Value | Provider |
+|-------|----------|
+| `documentai` | Google Document AI (default) |
+| `textract` | AWS Textract Expense Analysis |
+| `textract-openai` | Hybrid: Textract + OpenAI |
+
+<Tabs>
+  <Tab title="Google Document AI">
+    ```bash
+    OCR_PROVIDER=documentai
+    ```
+    
+    Requires Google Cloud credentials with Document AI API enabled.
+  </Tab>
+  <Tab title="AWS Textract">
+    ```bash
+    OCR_PROVIDER=textract
+    AWS_ACCESS_KEY_ID=your-key
+    AWS_SECRET_ACCESS_KEY=your-secret
+    AWS_REGION=us-east-1
+    ```
+  </Tab>
+</Tabs>
+
+## Database Setup
+
+Initialize the database with Prisma:
+
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Push schema to database
+npx prisma db push
+```
+
+## Email Forwarding (Optional)
+
+To enable email forwarding, configure Postmark:
+
+```bash
+POSTMARK_WEBHOOK_USERNAME=your-username
+POSTMARK_WEBHOOK_PASSWORD=your-password
+```
+
+Set up a Postmark inbound webhook pointing to:
+```
+https://your-domain.com/api/webhooks/inbound-email
+```
+
+## Running Locally
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The app runs at `http://localhost:5000`.
+
+## Production Deployment
+
+### Vercel (Recommended)
+
+1. Connect your repo to Vercel
+2. Add environment variables in project settings
+3. Deploy
+
+### Docker
+
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN npm ci
+RUN npm run build
+CMD ["npm", "start"]
+```
+
+## Troubleshooting
+
+<Accordion title="Database connection errors?">
+  Ensure your `DATABASE_URL` is correct and the PostgreSQL server is accessible.
+</Accordion>
+
+<Accordion title="OCR not working?">
+  Check that your OCR provider credentials are set and the service is enabled in your cloud console.
+</Accordion>

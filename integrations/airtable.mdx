@@ -1,0 +1,96 @@
+---
+title: "Airtable Integration"
+description: "Sync invoices directly to your Airtable bases"
+---
+
+Connect VATextract to Airtable to automatically push extracted invoice data to your bases.
+
+## Connecting to Airtable
+
+<Steps>
+  <Step title="Navigate to Integrations">
+    Go to **Settings → Integrations** in your dashboard.
+  </Step>
+  <Step title="Click Connect Airtable">
+    Click the **Connect** button next to the Airtable integration.
+  </Step>
+  <Step title="Authorize Access">
+    You'll be redirected to Airtable to authorize VATextract. Click **Add a base** and select the base you want to use.
+  </Step>
+  <Step title="Configure Mapping">
+    Select your base, table, and map VATextract fields to your Airtable columns.
+  </Step>
+</Steps>
+
+<Info>
+  VATextract uses Airtable's OAuth 2.0 for secure authentication. We only access the bases you explicitly authorize.
+</Info>
+
+## Field Mapping
+
+Map VATextract fields to your Airtable columns:
+
+| VATextractField | Recommended Airtable Type |
+|--------------------|---------------------------|
+| Supplier Name | Single line text |
+| Invoice Number | Single line text |
+| Invoice Date | Date |
+| Due Date | Date |
+| Total Amount | Currency |
+| VAT Amount | Currency |
+| Currency | Single select |
+| Status | Single select |
+
+### Custom Fields
+
+You can map any extracted field to any Airtable column. The integration supports:
+
+- Text fields → Single/Long text
+- Numbers → Number/Currency
+- Dates → Date
+- Arrays (line items) → Linked records
+
+## Syncing Invoices
+
+### Manual Sync
+
+1. Select invoices in your dashboard
+2. Click **Bulk Actions → Push to Airtable**
+3. Invoices are synced to your connected base
+
+### Automatic Sync
+
+Enable auto-sync in **Settings → Integrations → Airtable**:
+
+- **On upload**: Sync immediately when an invoice is processed
+- **On approval**: Sync only when review status is "Approved"
+
+## Handling Line Items
+
+Line items can be synced in two ways:
+
+<Tabs>
+  <Tab title="JSON Field">
+    Store all line items as a JSON string in a Long text field.
+    
+    ```json
+    [
+      {"description": "Widget A", "quantity": 10, "amount": 100},
+      {"description": "Widget B", "quantity": 5, "amount": 75}
+    ]
+    ```
+  </Tab>
+  <Tab title="Linked Records">
+    Create a separate "Line Items" table and link records to invoices. Each line item becomes its own record.
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<Accordion title="Connection expired?">
+  Airtable tokens expire after 60 days. Reconnect in **Settings → Integrations** to refresh.
+</Accordion>
+
+<Accordion title="Missing columns in mapping?">
+  VATextract caches your table structure. Click **Refresh Schema** to fetch the latest columns.
+</Accordion>

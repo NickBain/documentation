@@ -1,0 +1,88 @@
+---
+title: "Email Forwarding"
+description: "Automatically process invoices sent to your inbox"
+---
+
+Forward invoices directly from your email to VATextract for automatic processing—no manual uploads required.
+
+## Your Personal Inbox
+
+Every VATextract account includes a unique email address for invoice forwarding:
+
+```
+...@vat-extract.com
+```
+
+Find your personal address in **Settings → Email Forwarding**.
+
+## How It Works
+
+<Steps>
+  <Step title="Receive an Invoice">
+    An invoice lands in your regular work email.
+  </Step>
+  <Step title="Forward It">
+    Forward the email to your VATextract inbox address. You can find it on the dashboard.
+  </Step>
+  <Step title="Automatic Processing">
+    VATextract extracts the PDF attachment and processes it immediately.
+  </Step>
+  <Step title="View Results">
+    The extracted invoice appears in your dashboard within seconds.
+  </Step>
+</Steps>
+
+## Supported Attachment Types
+
+| Type | Supported |
+|------|-----------|
+| PDF attachments | ✓ |
+| Image attachments (JPEG, PNG) | ✓ |
+| Multiple attachments | ✓ (processed as separate invoices) |
+| Inline images | ✓ |
+
+<Info>
+  If multiple PDF attachments are included in one email, each is processed as a separate invoice.
+</Info>
+
+## Email Rules Setup
+
+Set up automatic forwarding in your email client:
+
+<Tabs>
+  <Tab title="Gmail">
+    1. Go to **Settings → Filters and Blocked Addresses**
+    2. Click **Create a new filter**
+    3. Set criteria (e.g., from specific suppliers)
+    4. Choose **Forward it to** your VATextract address
+  </Tab>
+  <Tab title="Outlook">
+    1. Go to **Settings → Mail → Rules**
+    2. Click **Add new rule**
+    3. Set conditions for invoice emails
+    4. Add action: **Forward to** your VATextract address
+  </Tab>
+</Tabs>
+
+## Security
+
+<CardGroup cols={2}>
+  <Card title="Unique Address" icon="fingerprint">
+    Your inbox address is unique and private. Only emails to this address are processed.
+  </Card>
+  <Card title="Encrypted Storage" icon="lock">
+    Attachments are encrypted in transit and at rest. Files are deleted after processing.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<Accordion title="Invoice not appearing in dashboard?">
+  - Ensure the email was sent to the correct address
+  - Check that the attachment is a supported format (PDF or image)
+  - Verify the attachment isn't password-protected
+</Accordion>
+
+<Accordion title="Can I forward from multiple email accounts?">
+  Yes! Forward from any email address. All invoices appear in your single VATextractdashboard.
+</Accordion>

@@ -1,0 +1,90 @@
+---
+title: "Google Sheets"
+description: "Export invoices to Google Sheets for collaborative workflows"
+---
+
+Sync your extracted invoice data to Google Sheets for real-time collaboration and analysis.
+
+## Connecting Google Sheets
+
+<Steps>
+  <Step title="Navigate to Integrations">
+    Go to **Settings → Integrations** in your dashboard.
+  </Step>
+  <Step title="Click Connect Google">
+    Click the **Connect** button next to Google Sheets.
+  </Step>
+  <Step title="Authorize Access">
+    Sign in to your Google account and grant VATextractpermission to create and edit spreadsheets.
+  </Step>
+  <Step title="Select or Create Sheet">
+    Choose an existing spreadsheet or create a new one for your invoice data.
+  </Step>
+</Steps>
+
+## Exporting to Google Sheets
+
+### Manual Export
+
+1. Select invoices in your dashboard
+2. Click **Bulk Actions → Export to Google Sheets**
+3. Data is appended to your connected spreadsheet
+
+### Automatic Sync
+
+Enable auto-sync in integration settings:
+
+- New invoices automatically added to your sheet
+- Updates sync when invoice data is modified
+
+## Sheet Structure
+
+VATextractcreates a structured spreadsheet:
+
+| Column | Description |
+|--------|-------------|
+| A: Invoice Number | Unique identifier |
+| B: Date | Invoice date |
+| C: Supplier | Company name |
+| D: Net Amount | Pre-tax total |
+| E: VAT | Tax amount |
+| F: Total | Grand total |
+| G: Currency | ISO code |
+| H: Status | Processing status |
+
+<Info>
+  Column headers are automatically created on first export. You can rename columns without breaking the sync.
+</Info>
+
+## Sharing & Collaboration
+
+Your connected Google Sheet can be shared with team members:
+
+1. Open the spreadsheet in Google Sheets
+2. Click **Share** in the top right
+3. Add collaborators with view or edit access
+
+Changes made by collaborators in Google Sheets do not sync back to VATextract.
+
+## Permissions
+
+VATextractrequests the following Google permissions:
+
+| Permission | Purpose |
+|------------|---------|
+| See, edit, create spreadsheets | Export invoice data |
+| See your primary email | Identify your account |
+
+<Warning>
+  We never access your other Google Drive files or Gmail.
+</Warning>
+
+## Troubleshooting
+
+<Accordion title="Export fails with permission error?">
+  Your Google token may have expired. Disconnect and reconnect the integration in Settings.
+</Accordion>
+
+<Accordion title="Data appearing in wrong sheet?">
+  The integration uses the first sheet in your spreadsheet by default. Select a different sheet in the integration settings.
+</Accordion>

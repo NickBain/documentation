@@ -1,0 +1,95 @@
+---
+title: "Excel & CSV Export"
+description: "Download invoice data as spreadsheet files"
+---
+
+Export your extracted invoice data as Excel workbooks (.xlsx) or CSV files for local analysis, backup, or import into other systems.
+
+## Single Invoice Export
+
+Export one invoice with full details including line items:
+
+<Steps>
+  <Step title="Open Invoice">
+    Click on an invoice in your dashboard to open the detail view.
+  </Step>
+  <Step title="Click Export">
+    Click the **Export** button in the top right.
+  </Step>
+  <Step title="Choose Format">
+    Select **Excel** or **CSV** from the dropdown.
+  </Step>
+</Steps>
+
+### Excel Format
+
+Single invoice Excel exports include two sheets:
+
+| Sheet | Contents |
+|-------|----------|
+| Invoice Details | All header fields (supplier, dates, amounts, etc.) |
+| Line Items | One row per line item with description, quantity, price |
+
+### CSV Format
+
+CSV exports include one row per line item, with invoice details repeated on each row.
+
+## Bulk Export
+
+Export multiple invoices at once:
+
+<Steps>
+  <Step title="Select Invoices">
+    Check the boxes next to invoices in the dashboard, or use **Select All**.
+  </Step>
+  <Step title="Click Bulk Export">
+    Click **Bulk Actions → Export** in the toolbar.
+  </Step>
+  <Step title="Choose Format">
+    Select Excel or CSV format.
+  </Step>
+</Steps>
+
+<Info>
+  Bulk exports create one row per invoice (no line items). Use single invoice export for full line item details.
+</Info>
+
+## Exported Fields
+
+### Standard Fields
+
+| Field | Description |
+|-------|-------------|
+| Invoice Number | Unique invoice identifier |
+| Invoice Date | Issue date |
+| Due Date | Payment due date |
+| Supplier Name | Vendor/supplier company name |
+| Supplier VAT | VAT/Tax ID |
+| Net Amount | Pre-tax total |
+| VAT Amount | Tax amount |
+| Total Amount | Grand total |
+| Currency | ISO currency code |
+
+### Line Item Fields
+
+| Field | Description |
+|-------|-------------|
+| Description | Product/service description |
+| Quantity | Number of units |
+| Unit Price | Price per unit |
+| Amount | Line total |
+| Product Code | SKU or product code (if available) |
+
+## API Export
+
+Export programmatically via the REST API:
+
+```bash
+# Export single invoice as CSV
+GET /api/invoices/{id}/export?format=csv
+
+# Export single invoice as Excel
+GET /api/invoices/{id}/export?format=xlsx
+```
+
+See the [Export API](/api-reference/export) for full details.

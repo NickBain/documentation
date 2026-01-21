@@ -1,0 +1,88 @@
+---
+title: "VAT Validation"
+description: "Automatic EU and UK VAT number verification"
+---
+
+VATextract automatically validates supplier VAT numbers against official EU VIES and UK HMRC databases.
+
+## How It Works
+
+<Steps>
+  <Step title="Extraction">
+    When an invoice is processed, the supplier's VAT/Tax ID is extracted.
+  </Step>
+  <Step title="Validation">
+    The VAT number is checked against the appropriate government database (EU VIES or UK HMRC).
+  </Step>
+  <Step title="Matching">
+    The registered company name and address are compared with the invoice data.
+  </Step>
+</Steps>
+
+## Validation Statuses
+
+| Status | Description |
+|--------|-------------|
+| `VALID` | VAT number is registered and active |
+| `INVALID` | VAT number not found or inactive |
+| `PENDING` | Validation in progress |
+| `NOT_FOUND` | No VAT number detected on invoice |
+| `ERROR` | Validation service temporarily unavailable |
+
+## Match Quality
+
+Beyond validating the VAT number, VATextract compares the registered company details with the invoice:
+
+| Quality | Description |
+|---------|-------------|
+| `EXACT` | Company name matches the VAT registry exactly |
+| `CLOSE` | Minor differences (e.g., "Ltd" vs "Limited") |
+| `NO_MATCH` | Significant discrepancy—may indicate fraud |
+
+<Warning>
+  A `NO_MATCH` result doesn't necessarily indicate fraud. Company names on invoices often differ from official registry entries. Always review manually before rejecting.
+</Warning>
+
+## Supported Countries
+
+### European Union (VIES)
+All 27 EU member states including:
+- Germany (DE), France (FR), Netherlands (NL)
+- Spain (ES), Italy (IT), Poland (PL)
+- And all other EU countries
+
+### United Kingdom (HMRC)
+- UK VAT numbers (GB prefix)
+
+<Info>
+  VAT validation happens asynchronously. Results typically arrive within 1-5 seconds of invoice processing.
+</Info>
+
+## Validation Response Data
+
+Each validated VAT number includes:
+
+```json
+{
+  "vatValidationStatus": "VALID",
+  "vatMatchQuality": "EXACT",
+  "vatValidatedAt": "2024-01-15T10:30:00Z",
+  "vatValidationData": {
+    "vat_number": "DE123456789",
+    "country_code": "DE",
+    "company_name": "Example GmbH",
+    "company_address": "Musterstraße 1, 10115 Berlin"
+  }
+}
+```
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Review Mismatches" icon="magnifying-glass">
+    Investigate `NO_MATCH` results before processing payments
+  </Card>
+  <Card title="Revalidate Periodically" icon="arrows-rotate">
+    VAT registrations can change—revalidate suppliers annually
+  </Card>
+</CardGroup>

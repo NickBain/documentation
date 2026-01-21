@@ -1,0 +1,112 @@
+---
+title: "Data Extraction"
+description: "AI-powered extraction of structured data from invoices"
+---
+
+VATextract uses advanced OCR technology to extract structured data from any invoice format—PDF, scanned documents, or images.
+
+## Supported File Formats
+
+| Format | Description |
+|--------|-------------|
+| PDF | Native PDFs and scanned documents |
+| JPEG/PNG | High-resolution images |
+| Multi-page | Documents up to 100 pages |
+
+## Extracted Fields
+
+### Header Information
+
+| Field | Description |
+|-------|-------------|
+| `invoiceNumber` | Unique invoice identifier |
+| `invoiceDate` | Date the invoice was issued |
+| `dueDate` | Payment due date |
+| `deliveryDate` | Goods/services delivery date |
+| `purchaseOrder` | Purchase order reference |
+
+### Financial Data
+
+| Field | Description |
+|-------|-------------|
+| `netAmount` | Pre-tax amount |
+| `vatAmount` | VAT/tax amount |
+| `vatRate` | VAT percentage |
+| `totalAmount` | Total including tax |
+| `currency` | ISO currency code (EUR, GBP, USD, etc.) |
+| `freightAmount` | Shipping/freight charges |
+
+### Supplier Details
+
+| Field | Description |
+|-------|-------------|
+| `supplierName` | Company name |
+| `supplierTaxId` | VAT/Tax identification number |
+| `supplierAddress` | Full address |
+| `supplierContact` | Email, phone, IBAN, etc. |
+
+### Line Items
+
+Each line item contains:
+
+```json
+{
+  "description": "Product or service name",
+  "quantity": 10,
+  "unitPrice": 25.00,
+  "amount": 250.00,
+  "productCode": "SKU-12345"
+}
+```
+
+## OCR Providers
+
+VATextract supports multiple OCR engines:
+
+<Tabs>
+  <Tab title="Google Document AI">
+    **Default provider.** Best for European invoices and complex layouts.
+    
+    - Excellent multi-language support
+    - Strong table extraction
+    - High accuracy on scanned documents
+  </Tab>
+  <Tab title="AWS Textract">
+    **Alternative provider.** Expense Analysis API optimized for invoices.
+    
+    - Native invoice field detection
+    - Strong for English documents
+    - Good line item extraction
+  </Tab>
+</Tabs>
+
+<Info>
+  Configure your preferred OCR provider in Settings → Preferences, or set the `OCR_PROVIDER` environment variable for self-hosted deployments.
+</Info>
+
+## Extraction Confidence
+
+Each extracted field includes a confidence score (0-100%). Low-confidence extractions are highlighted in the review interface for manual verification.
+
+## Geometry Data
+
+For advanced integrations, VATextractprovides bounding box coordinates for each extracted field:
+
+```json
+{
+  "fieldName": "TOTAL",
+  "text": "$1,250.00",
+  "confidence": 98.5,
+  "geometry": {
+    "boundingBox": {
+      "left": 0.72,
+      "top": 0.85,
+      "width": 0.15,
+      "height": 0.02
+    },
+    "pageNumber": 1
+  }
+}
+```
+
+This enables document overlay highlighting and programmatic field location.

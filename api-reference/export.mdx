@@ -1,0 +1,117 @@
+---
+title: "Export Data"
+description: "GET /api/invoices/export"
+---
+
+Export invoice data as CSV or Excel files.
+
+## Single Invoice Export
+
+### Endpoint
+
+```
+GET /api/invoices/:id/export
+```
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `format` | string | `csv` | Export format: `csv` or `xlsx` |
+| `includeLineItems` | boolean | `true` | Include line item details |
+
+### Example
+
+```bash
+# Export as CSV
+curl -X GET "https://vatextract.com/api/invoices/inv_abc123/export?format=csv" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -o invoice.csv
+
+# Export as Excel
+curl -X GET "https://vatextract.com/api/invoices/inv_abc123/export?format=xlsx" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -o invoice.xlsx
+```
+
+### Response
+
+Returns the file as a download with appropriate headers:
+
+```
+Content-Type: text/csv
+Content-Disposition: attachment; filename="invoice-INV-2024-001.csv"
+```
+
+## Bulk Export
+
+Export multiple invoices at once.
+
+### Endpoint
+
+```
+GET /api/invoices/export
+```
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `format` | string | `csv` | Export format: `csv` or `xlsx` |
+| `ids` | string | - | Comma-separated invoice IDs |
+| `supplier` | string | - | Filter by supplier |
+| `dateFrom` | string | - | Invoice date range start |
+| `dateTo` | string | - | Invoice date range end |
+
+### Example
+
+```bash
+# Export specific invoices
+curl -X GET "https://vatextract.com/api/invoices/export?format=xlsx&ids=inv_abc,inv_def" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -o invoices.xlsx
+
+# Export all invoices from a date range
+curl -X GET "https://vatextract.com/api/invoices/export?dateFrom=2024-01-01&dateTo=2024-01-31" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -o january-invoices.csv
+```
+
+## Export Formats
+
+### CSV Format
+
+- One row per invoice (bulk) or per line item (single)
+- UTF-8 encoded with BOM for Excel compatibility
+- Comma-separated values
+
+### Excel Format (XLSX)
+
+**Single invoice:**
+- Sheet 1: Invoice details
+- Sheet 2: Line items
+
+**Bulk export:**
+- Single sheet with one row per invoice
+- No line items included
+
+## Exported Fields
+
+| Field | CSV Column | Excel Column |
+|-------|------------|--------------|
+| Invoice Number | `invoice_number` | Invoice Number |
+| Invoice Date | `invoice_date` | Invoice Date |
+| Supplier Name | `supplier_name` | Supplier Name |
+| Supplier VAT | `supplier_vat` | Supplier VAT |
+| Net Amount | `net_amount` | Net Amount |
+| VAT Amount | `vat_amount` | VAT Amount |
+| Total Amount | `total_amount` | Total Amount |
+| Currency | `currency` | Currency |
+| VAT Status | `vat_status` | VAT Status |
+
+## Error Responses
+
+| Status | Error | Description |
+|--------|-------|-------------|
+| 400 | `No invoices found` | No invoices match the criteria |
+| 401 | `Unauthorized` | Invalid/missing auth token |

@@ -1,0 +1,114 @@
+---
+title: "List Invoices"
+description: "GET /api/invoices"
+---
+
+Retrieve a paginated list of your invoices with optional filtering.
+
+## Endpoint
+
+```
+GET /api/invoices
+```
+
+## Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `page` | integer | 1 | Page number |
+| `limit` | integer | 50 | Items per page (max 100) |
+| `supplier` | string | - | Filter by supplier name (partial match) |
+| `status` | string | - | Filter by processing status |
+| `reviewStatus` | string | - | Filter by review status |
+| `currency` | string | - | Filter by currency code |
+| `vatRate` | number | - | Filter by VAT rate |
+| `dateFrom` | string | - | Invoice date range start (ISO 8601) |
+| `dateTo` | string | - | Invoice date range end (ISO 8601) |
+| `keyword` | string | - | Search across multiple fields |
+| `clientId` | string | - | Filter by client ID |
+
+## Example Request
+
+```bash
+curl -X GET "https://vatextract.com/api/invoices?page=1&limit=20&supplier=Acme" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Response
+
+```json
+{
+  "invoices": [
+    {
+      "id": "inv_abc123",
+      "supplierName": "Acme Corp",
+      "invoiceNumber": "INV-2024-001",
+      "invoiceDate": "2024-01-10T00:00:00Z",
+      "dueDate": "2024-02-10T00:00:00Z",
+      "totalAmount": 1250.00,
+      "vatAmount": 250.00,
+      "vatRate": 20,
+      "netAmount": 1000.00,
+      "currency": "EUR",
+      "status": "completed",
+      "reviewStatus": "NOT_REVIEWED",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "clientId": "client_xyz789",
+      "client": {
+        "id": "client_xyz789",
+        "name": "My Client"
+      }
+    }
+  ],
+  "total": 156,
+  "page": 1,
+  "limit": 20,
+  "totalPages": 8
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `invoices` | array | List of invoice objects |
+| `total` | integer | Total number of invoices matching filters |
+| `page` | integer | Current page number |
+| `limit` | integer | Items per page |
+| `totalPages` | integer | Total number of pages |
+
+### Invoice Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique invoice ID |
+| `supplierName` | string | Vendor company name |
+| `invoiceNumber` | string | Invoice identifier |
+| `invoiceDate` | string | Issue date (ISO 8601) |
+| `dueDate` | string | Payment due date |
+| `totalAmount` | number | Grand total |
+| `vatAmount` | number | Tax amount |
+| `vatRate` | number | VAT percentage |
+| `netAmount` | number | Pre-tax amount |
+| `currency` | string | ISO currency code |
+| `status` | string | `processing`, `completed`, `failed` |
+| `reviewStatus` | string | `NOT_REVIEWED`, `IN_REVIEW`, `REVIEWED`, `APPROVED` |
+
+## Status Values
+
+### Processing Status
+
+| Value | Description |
+|-------|-------------|
+| `processing` | OCR in progress |
+| `completed` | Extraction finished |
+| `failed` | Extraction failed |
+
+### Review Status
+
+| Value | Description |
+|-------|-------------|
+| `NOT_REVIEWED` | Not yet reviewed |
+| `IN_REVIEW` | Currently being reviewed |
+| `REVIEWED` | Review completed |
+| `APPROVED` | Approved for processing |

@@ -1,0 +1,136 @@
+---
+title: "Get Invoice Details"
+description: "GET /api/invoices/:id"
+---
+
+Retrieve full details for a single invoice, including line items and extraction geometry.
+
+## Endpoint
+
+```
+GET /api/invoices/:id
+```
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Invoice ID (e.g., `inv_abc123`) |
+
+## Example Request
+
+```bash
+curl -X GET https://vatextract.com/api/invoices/inv_abc123 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Response
+
+```json
+{
+  "id": "inv_abc123",
+  "status": "completed",
+  "fileName": "invoice.pdf",
+  "fileUrl": "https://storage.vatextract.com/...",
+  
+  "invoiceNumber": "INV-2024-001",
+  "invoiceDate": "2024-01-10T00:00:00Z",
+  "dueDate": "2024-02-10T00:00:00Z",
+  "purchaseOrder": "PO-789",
+  
+  "supplierName": "Acme Corp",
+  "supplierTaxId": "DE123456789",
+  "supplierAddress": "123 Business St, Berlin, Germany",
+  "supplierContact": {
+    "email": "billing@acme.com",
+    "iban": "DE89370400440532013000"
+  },
+  
+  "receiverName": "My Company Ltd",
+  "receiverTaxId": "GB987654321",
+  "receiverAddress": "456 Commerce Ave, London, UK",
+  
+  "netAmount": 1000.00,
+  "vatAmount": 250.00,
+  "vatRate": 25,
+  "totalAmount": 1250.00,
+  "currency": "EUR",
+  
+  "lineItems": [
+    {
+      "description": "Professional Services",
+      "quantity": 10,
+      "unitPrice": 100.00,
+      "amount": 1000.00,
+      "productCode": "SVC-001"
+    }
+  ],
+  
+  "vatValidationStatus": "VALID",
+  "vatMatchQuality": "EXACT",
+  "vatValidatedAt": "2024-01-15T10:35:00Z",
+  "vatValidationData": {
+    "vat_number": "DE123456789",
+    "country_code": "DE",
+    "company_name": "Acme Corporation",
+    "company_address": "123 Business St, 10115 Berlin"
+  },
+  
+  "reviewStatus": "APPROVED",
+  "tags": ["q1-2024", "services"],
+  "notes": "Approved by finance team",
+  
+  "createdAt": "2024-01-15T10:30:00Z"
+}
+```
+
+## Line Items
+
+Each line item contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `description` | string | Product/service description |
+| `quantity` | number | Number of units |
+| `unitPrice` | number | Price per unit |
+| `amount` | number | Line total |
+| `productCode` | string | SKU or product code |
+
+## Geometry Data
+
+For advanced integrations, request geometry data:
+
+```
+GET /api/invoices/:id?includeGeometry=true
+```
+
+Adds `extractedFieldsGeometry` array with bounding boxes for each extracted field:
+
+```json
+{
+  "extractedFieldsGeometry": [
+    {
+      "blockId": "TOTAL-1-0.7200-0.8500",
+      "fieldName": "TOTAL",
+      "text": "$1,250.00",
+      "confidence": 98.5,
+      "geometry": {
+        "boundingBox": {
+          "left": 0.72,
+          "top": 0.85,
+          "width": 0.15,
+          "height": 0.02
+        },
+        "pageNumber": 1
+      }
+    }
+  ]
+}
+```
+
+## Error Responses
+
+| Status | Error | Description |
+|--------|-------|-------------|
+| 404 | `Invoice not found` | Invalid ID or not owned by user |
+| 401 | `Unauthorized` | Invalid/missing auth token |

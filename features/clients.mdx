@@ -1,0 +1,75 @@
+---
+title: "Client Management"
+description: "Organize invoices by client for better tracking"
+---
+
+Group your invoices by client to track spending, view history, and generate reports per customer or supplier.
+
+## Creating Clients
+
+<Steps>
+  <Step title="Navigate to Clients">
+    Go to **Dashboard → Clients** in the sidebar.
+  </Step>
+  <Step title="Add New Client">
+    Click **Add Client** and enter the client name.
+  </Step>
+  <Step title="Save">
+    The client is now available for invoice assignment.
+  </Step>
+</Steps>
+
+## Assigning Invoices to Clients
+
+### During Review
+
+When reviewing an extracted invoice, select a client from the **Client** dropdown. The assignment is saved automatically.
+
+### Bulk Assignment
+
+1. Select multiple invoices in the dashboard
+2. Click **Bulk Actions → Assign Client**
+3. Choose the target client
+
+<Info>
+  VATextrac tcan automatically suggest clients based on supplier name matching. Enable this in **Settings → Preferences**.
+</Info>
+
+## Client Filtering
+
+Filter your invoice list by client:
+
+1. Click the **Filters** button in the dashboard
+2. Select **Client** from the filter options
+3. Choose one or more clients
+
+## Benefits
+
+<CardGroup cols={2}>
+  <Card title="Spending Tracking" icon="chart-line">
+    View total spend per client over time
+  </Card>
+  <Card title="Client Reports" icon="file-invoice">
+    Export all invoices for a specific client
+  </Card>
+  <Card title="Quick Search" icon="magnifying-glass">
+    Filter dashboard by client for fast access
+  </Card>
+  <Card title="Organized Exports" icon="folder">
+    Include client name in exported data
+  </Card>
+</CardGroup>
+
+## API Access
+
+Clients are available via the API:
+
+```bash
+# List all clients
+GET /api/clients
+
+# Filter invoices by client
+GET /api/invoices?clientId=client_abc123
+```
+
+See the [API Reference](/api-reference/invoices) for full details.
