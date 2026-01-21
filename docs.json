@@ -40,26 +40,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoints",
-            "pages": [
-              "api-reference/upload",
-              "api-reference/invoices",
-              "api-reference/invoice-details",
-              "api-reference/export"
-            ]
-          }
-        ]
       }
     ],
     "global": {
